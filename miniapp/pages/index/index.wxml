@@ -1,0 +1,115 @@
+<!-- 首页 -->
+<view class="page-container">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="store-info">
+      <view class="store-name text-lg text-bold">洗衣店管理系统</view>
+      <view class="store-address text-sm text-secondary">当前门店：总店</view>
+    </view>
+    <view class="avatar" bindtap="getUserProfile" wx:if="{{!hasUserInfo && canIUseGetUserProfile}}">
+      <view class="avatar-placeholder flex-center">
+        <text class="text-hint">登录</text>
+      </view>
+    </view>
+    <view class="avatar" wx:else>
+      <image src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    </view>
+  </view>
+
+  <!-- 数据概览 -->
+  <view class="dashboard-cards">
+    <view class="dashboard-card" bindtap="goToOrders">
+      <view class="card-title text-sm">今日订单</view>
+      <view class="card-value text-xl text-bold">{{summaryData.todayOrderCount}}</view>
+    </view>
+    <view class="dashboard-card" bindtap="goToOrders">
+      <view class="card-title text-sm">今日营收</view>
+      <view class="card-value text-xl text-bold">¥{{summaryData.todayIncome}}</view>
+    </view>
+    <view class="dashboard-card" bindtap="goToOrders">
+      <view class="card-title text-sm">待处理</view>
+      <view class="card-value text-xl text-bold">{{summaryData.pendingOrderCount}}</view>
+    </view>
+    <view class="dashboard-card" bindtap="goToMembers">
+      <view class="card-title text-sm">新增会员</view>
+      <view class="card-value text-xl text-bold">{{summaryData.todayNewMembers}}</view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-actions">
+    <view class="section-title text-lg text-bold">快捷入口</view>
+    <view class="quick-action-grid">
+      <view class="quick-action-item" bindtap="goToCreateOrder">
+        <view class="quick-action-icon">
+          <image src="/images/icon-new-order.png" mode="aspectFit"></image>
+        </view>
+        <view class="quick-action-text text-sm">录入订单</view>
+      </view>
+      <view class="quick-action-item" bindtap="goToOrders">
+        <view class="quick-action-icon">
+          <image src="/images/icon-orders.png" mode="aspectFit"></image>
+        </view>
+        <view class="quick-action-text text-sm">订单列表</view>
+      </view>
+      <view class="quick-action-item" bindtap="goToMembers">
+        <view class="quick-action-icon">
+          <image src="/images/icon-members.png" mode="aspectFit"></image>
+        </view>
+        <view class="quick-action-text text-sm">会员管理</view>
+      </view>
+      <view class="quick-action-item">
+        <view class="quick-action-icon">
+          <image src="/images/icon-clothes.png" mode="aspectFit"></image>
+        </view>
+        <view class="quick-action-text text-sm">衣物管理</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近订单 -->
+  <view class="recent-orders">
+    <view class="section-header flex-between">
+      <view class="section-title text-lg text-bold">最近订单</view>
+      <view class="view-more text-sm text-brand" bindtap="goToOrders">查看更多</view>
+    </view>
+
+    <view class="order-list">
+      <block wx:if="{{recentOrders.length > 0}}">
+        <view class="order-item card" wx:for="{{recentOrders}}" wx:key="id" bindtap="goToOrderDetail" data-id="{{item.id}}">
+          <view class="order-header flex-between">
+            <view class="order-number text-md text-bold">订单号：{{item.orderNumber}}</view>
+            <view class="order-status {{item.status === 'COMPLETED' ? 'text-success' : 'text-warning'}}">
+              {{item.status === 'PENDING' ? '待处理' : 
+                item.status === 'PROCESSING' ? '处理中' : 
+                item.status === 'READY' ? '待取件' : 
+                item.status === 'COMPLETED' ? '已完成' : '未知'}}
+            </view>
+          </view>
+          <view class="divider"></view>
+          <view class="order-info flex-between">
+            <view class="order-customer text-sm">
+              <text>客户：{{item.customerName}}</text>
+              <text class="text-secondary">{{item.customerPhone}}</text>
+            </view>
+            <view class="order-amount text-md text-bold">¥{{item.totalAmount}}</view>
+          </view>
+          <view class="order-time text-sm text-secondary">
+            下单时间：{{item.createTime}}
+          </view>
+        </view>
+      </block>
+
+      <view class="empty-state" wx:if="{{!loading && recentOrders.length === 0}}">
+        <image class="empty-state-icon" src="/images/empty-orders.png" mode="aspectFit"></image>
+        <view class="empty-state-text">暂无订单数据</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-container flex-center" wx:if="{{loading}}">
+    <view class="loading"></view>
+    <text class="loading-text text-sm text-secondary">加载中...</text>
+  </view>
+</view> 

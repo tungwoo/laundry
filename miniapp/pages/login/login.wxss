@@ -1,0 +1,130 @@
+/* 导入主题样式 */
+@import "../../styles/theme.wxss";
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 60rpx 40rpx;
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80rpx;
+  margin-top: 40rpx;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40rpx;
+}
+
+.error-msg {
+  background-color: rgba(245, 34, 45, 0.1);
+  color: var(--error-color);
+  padding: 16rpx 24rpx;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 24rpx;
+  font-size: 24rpx;
+}
+
+.form-item {
+  margin-bottom: 36rpx;
+}
+
+.form-label {
+  margin-bottom: 16rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.form-input {
+  background-color: #f8f8f8;
+  height: 90rpx;
+  border-radius: var(--border-radius-md);
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #f0f0f0;
+}
+
+.remember-password {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label text {
+  margin-left: 8rpx;
+}
+
+.login-btn {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-radius: var(--border-radius-md);
+  font-size: 32rpx;
+  margin-bottom: 24rpx;
+  letter-spacing: 2rpx;
+  font-weight: 500;
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.wechat-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90rpx;
+  line-height: 90rpx;
+  border-radius: var(--border-radius-md);
+  font-size: 32rpx;
+  margin-bottom: 24rpx;
+  letter-spacing: 2rpx;
+  font-weight: 500;
+  border: 2rpx solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: #ffffff;
+}
+
+.wechat-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 12rpx;
+}
+
+.login-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding: 24rpx 0;
+}
+
+.login-footer text {
+  font-size: 24rpx;
+} 

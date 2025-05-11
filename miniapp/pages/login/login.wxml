@@ -1,0 +1,77 @@
+<view class="login-container">
+  <view class="login-header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="title text-xxl text-bold">洗衣店管理系统</view>
+    <view class="subtitle text-sm text-secondary">高效管理，轻松运营</view>
+  </view>
+  
+  <view class="login-form">
+    <!-- 错误提示 -->
+    <view class="error-msg" wx:if="{{errorMsg}}">
+      <text>{{errorMsg}}</text>
+    </view>
+    
+    <!-- 用户名输入框 -->
+    <view class="form-item">
+      <view class="form-label text-md">用户名</view>
+      <input 
+        class="form-input"
+        type="text"
+        placeholder="请输入用户名"
+        value="{{username}}"
+        bindinput="onUsernameInput"
+      />
+    </view>
+    
+    <!-- 密码输入框 -->
+    <view class="form-item">
+      <view class="form-label text-md">密码</view>
+      <input 
+        class="form-input"
+        type="password"
+        placeholder="请输入密码"
+        value="{{password}}"
+        bindinput="onPasswordInput"
+      />
+    </view>
+    
+    <!-- 记住密码 -->
+    <view class="remember-password">
+      <checkbox-group bindchange="onRememberPasswordChange">
+        <label class="checkbox-label">
+          <checkbox value="true" checked="{{rememberPassword}}" color="#1890ff" />
+          <text class="text-sm">记住密码</text>
+        </label>
+      </checkbox-group>
+    </view>
+    
+    <!-- 账号密码登录按钮 -->
+    <button 
+      class="btn-primary login-btn" 
+      bindtap="handleLogin" 
+      loading="{{loading}}" 
+      disabled="{{loading}}"
+    >
+      账号密码登录
+    </button>
+    
+    <!-- 微信一键登录按钮 -->
+    <button 
+      open-type="getUserInfo" 
+      class="btn-outline wechat-login-btn" 
+      bindtap="handleWechatLogin"
+      disabled="{{loading}}"
+    >
+      <image class="wechat-icon" src="/images/wechat.png" mode="aspectFit"></image>
+      微信一键登录
+    </button>
+  </view>
+  
+  <!-- 底部文字 -->
+  <view class="login-footer">
+    <text class="text-sm text-secondary">登录即表示您同意</text>
+    <text class="text-sm text-brand">《用户协议》</text>
+    <text class="text-sm text-secondary">和</text>
+    <text class="text-sm text-brand">《隐私政策》</text>
+  </view>
+</view> 
