@@ -33,6 +33,20 @@ const routes = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: '首页', icon: 'dashboard' }
+      },
+      {
+        path: '/order',
+        name: 'Order',
+        component: { render: h => h('router-view') },
+        meta: { title: '订单管理', icon: 'shopping-cart' },
+        children: [
+          {
+            path: 'create',
+            name: 'OrderCreate',
+            component: () => import('@/views/order/create'),
+            meta: { title: '录入订单', icon: 'plus' }
+          }
+        ]
       }
     ]
   },

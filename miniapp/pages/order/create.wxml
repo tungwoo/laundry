@@ -1,2 +1,280 @@
 <!--pages/order/create.wxml-->
-<text>pages/order/create.wxml</text>
+<view class="container">
+  <view class="steps">
+    <view class="step-item {{currentStep >= 0 ? 'active' : ''}}">
+      <view class="step-number">1</view>
+      <view class="step-title">客户信息</view>
+    </view>
+    <view class="step-line {{currentStep >= 1 ? 'active' : ''}}"></view>
+    <view class="step-item {{currentStep >= 1 ? 'active' : ''}}">
+      <view class="step-number">2</view>
+      <view class="step-title">衣物信息</view>
+    </view>
+    <view class="step-line {{currentStep >= 2 ? 'active' : ''}}"></view>
+    <view class="step-item {{currentStep >= 2 ? 'active' : ''}}">
+      <view class="step-number">3</view>
+      <view class="step-title">订单确认</view>
+    </view>
+  </view>
+
+  <!-- 步骤1：客户信息 -->
+  <view class="step-content" hidden="{{currentStep !== 0}}">
+    <view class="section-title">选择会员</view>
+    <view class="search-box">
+      <icon type="search" size="18"></icon>
+      <input placeholder="搜索会员姓名/手机号" bindinput="onMemberSearchInput" />
+    </view>
+
+    <view class="member-list" wx:if="{{searchResults.length > 0}}">
+      <view class="member-item" wx:for="{{searchResults}}" wx:key="id" bindtap="selectMember" data-member="{{item}}">
+        <view class="member-info">
+          <view class="member-name">{{item.name}}</view>
+          <view class="member-phone">{{item.phone}}</view>
+        </view>
+        <view class="member-balance">余额: ¥{{item.balance}}</view>
+      </view>
+    </view>
+
+    <view class="selected-member" wx:if="{{orderForm.customerId}}">
+      <view class="section-title">已选择会员</view>
+      <view class="member-card">
+        <view class="member-card-info">
+          <view class="member-name">{{orderForm.customerName}}</view>
+          <view class="member-phone">{{orderForm.customerPhone}}</view>
+        </view>
+        <view class="member-balance">余额: ¥{{orderForm.customerBalance}}</view>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+    
+    <view class="new-customer-section">
+      <view class="section-title">
+        <view>创建新客户</view>
+        <switch checked="{{isNewCustomer}}" bindchange="toggleNewCustomer" color="#1890ff" />
+      </view>
+      
+      <block wx:if="{{isNewCustomer}}">
+        <view class="form-item">
+          <view class="form-label">姓名</view>
+          <input class="form-input" placeholder="请输入客户姓名" value="{{newCustomer.name}}" bindinput="onInputNewCustomerName" />
+        </view>
+        <view class="form-item">
+          <view class="form-label">手机号</view>
+          <input class="form-input" placeholder="请输入手机号" type="number" maxlength="11" value="{{newCustomer.phone}}" bindinput="onInputNewCustomerPhone" />
+        </view>
+        <view class="form-item">
+          <view class="form-label">是否创建会员</view>
+          <switch checked="{{newCustomer.isMember}}" bindchange="toggleNewMember" color="#1890ff" />
+        </view>
+        <view class="form-item" wx:if="{{newCustomer.isMember}}">
+          <view class="form-label">初始充值</view>
+          <input class="form-input" placeholder="请输入初始充值金额" type="digit" value="{{newCustomer.initialBalance}}" bindinput="onInputInitialBalance" />
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 步骤2：衣物信息 -->
+  <view class="step-content" hidden="{{currentStep !== 1}}">
+    <view class="clothes-header">
+      <view class="section-title">衣物列表</view>
+      <view class="add-clothes-btn" bindtap="showAddClothesModal">
+        <image src="/images/add_circle.png" mode="widthFix"></image>
+        <text>添加衣物</text>
+      </view>
+    </view>
+
+    <view class="clothes-list" wx:if="{{orderForm.clothes.length > 0}}">
+      <view class="clothes-item" wx:for="{{orderForm.clothes}}" wx:key="id">
+        <view class="clothes-main">
+          <view class="clothes-info">
+            <view class="clothes-name">{{item.categoryName}} - {{item.name}}</view>
+            <view class="clothes-detail">{{item.color}} / {{item.material}}</view>
+          </view>
+          <view class="clothes-price">
+            <view class="price">¥{{item.price}}</view>
+            <view class="quantity">x{{item.quantity}}</view>
+          </view>
+        </view>
+        <view class="clothes-actions">
+          <view class="clothes-amount">金额: ¥{{item.price * item.quantity}}</view>
+          <view class="action-btns">
+            <button class="btn-edit" size="mini" bindtap="editClothes" data-index="{{index}}">编辑</button>
+            <button class="btn-delete" size="mini" bindtap="removeClothes" data-index="{{index}}">删除</button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-clothes" wx:else>
+      <image src="/images/empty.png" mode="aspectFit"></image>
+      <view>暂无衣物，请添加</view>
+    </view>
+
+    <view class="order-summary" wx:if="{{orderForm.clothes.length > 0}}">
+      <view class="summary-item">
+        <view class="summary-label">衣物总数</view>
+        <view class="summary-value">{{getTotalClothesCount()}}件</view>
+      </view>
+      <view class="summary-item">
+        <view class="summary-label">总金额</view>
+        <view class="summary-value price">¥{{getTotalAmount()}}</view>
+      </view>
+    </view>
+
+    <view class="form-item remarks-box">
+      <view class="form-label">订单备注</view>
+      <textarea class="form-textarea" placeholder="请输入订单备注" value="{{orderForm.remark}}" bindinput="onInputRemark" />
+    </view>
+  </view>
+
+  <!-- 步骤3：订单确认 -->
+  <view class="step-content" hidden="{{currentStep !== 2}}">
+    <view class="confirm-section">
+      <view class="section-title">客户信息</view>
+      <view class="confirm-info">
+        <view class="confirm-item">
+          <view class="confirm-label">姓名</view>
+          <view class="confirm-value">{{orderForm.customerName}}</view>
+        </view>
+        <view class="confirm-item">
+          <view class="confirm-label">手机号</view>
+          <view class="confirm-value">{{orderForm.customerPhone}}</view>
+        </view>
+        <view class="confirm-item" wx:if="{{orderForm.customerId}}">
+          <view class="confirm-label">会员余额</view>
+          <view class="confirm-value">¥{{orderForm.customerBalance}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="confirm-section">
+      <view class="section-title">衣物信息</view>
+      <view class="clothes-list">
+        <view class="clothes-item" wx:for="{{orderForm.clothes}}" wx:key="id">
+          <view class="clothes-main">
+            <view class="clothes-info">
+              <view class="clothes-name">{{item.categoryName}} - {{item.name}}</view>
+              <view class="clothes-detail">{{item.color}} / {{item.material}}</view>
+            </view>
+            <view class="clothes-price">
+              <view class="price">¥{{item.price}}</view>
+              <view class="quantity">x{{item.quantity}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="order-summary">
+        <view class="summary-item">
+          <view class="summary-label">衣物总数</view>
+          <view class="summary-value">{{getTotalClothesCount()}}件</view>
+        </view>
+        <view class="summary-item">
+          <view class="summary-label">总金额</view>
+          <view class="summary-value price">¥{{getTotalAmount()}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="confirm-section">
+      <view class="section-title">支付方式</view>
+      <radio-group class="payment-methods" bindchange="onPaymentMethodChange">
+        <label class="payment-method-item" wx:for="{{paymentMethods}}" wx:key="value">
+          <radio value="{{item.value}}" checked="{{orderForm.paymentMethod === item.value}}" color="#1890ff" />
+          <view class="payment-method-name">{{item.name}}</view>
+        </label>
+      </radio-group>
+    </view>
+
+    <view class="confirm-section">
+      <view class="section-title">支付状态</view>
+      <switch checked="{{orderForm.isPaid}}" bindchange="togglePaidStatus" color="#1890ff" />
+      <text class="payment-status">{{orderForm.isPaid ? '已支付' : '未支付'}}</text>
+    </view>
+    
+    <view class="confirm-section" wx:if="{{orderForm.remark}}">
+      <view class="section-title">订单备注</view>
+      <view class="confirm-remark">{{orderForm.remark}}</view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer-btns">
+    <button class="btn-prev" wx:if="{{currentStep > 0}}" bindtap="prevStep">上一步</button>
+    <button class="btn-next" wx:if="{{currentStep < 2}}" bindtap="nextStep">下一步</button>
+    <button class="btn-submit" wx:if="{{currentStep === 2}}" bindtap="submitOrder">提交订单</button>
+  </view>
+
+  <!-- 添加衣物弹窗 -->
+  <view class="clothes-modal" wx:if="{{clothesModalVisible}}">
+    <view class="modal-mask" bindtap="cancelClothesModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <view class="modal-title">{{clothesModalMode === 'add' ? '添加衣物' : '编辑衣物'}}</view>
+        <view class="modal-close" bindtap="cancelClothesModal">×</view>
+      </view>
+      <view class="modal-body">
+        <scroll-view scroll-y="true" style="max-height: 60vh;">
+          <view class="form-item">
+            <view class="form-label">衣物类别</view>
+            <picker bindchange="onCategoryChange" value="{{clothesForm.categoryIndex}}" range="{{clothesCategories}}" range-key="name">
+              <view class="picker">
+                {{clothesForm.categoryIndex !== null ? clothesCategories[clothesForm.categoryIndex].name : '请选择衣物类别'}}
+              </view>
+            </picker>
+          </view>
+          <view class="form-item">
+            <view class="form-label">衣物名称</view>
+            <input class="form-input" placeholder="请输入衣物名称" value="{{clothesForm.name}}" bindinput="onInputClothesName" />
+          </view>
+          <view class="form-item">
+            <view class="form-label">颜色</view>
+            <picker bindchange="onColorChange" value="{{clothesForm.colorIndex}}" range="{{colors}}">
+              <view class="picker">
+                {{clothesForm.colorIndex !== null ? colors[clothesForm.colorIndex] : '请选择颜色'}}
+              </view>
+            </picker>
+          </view>
+          <view class="form-item">
+            <view class="form-label">材质</view>
+            <picker bindchange="onMaterialChange" value="{{clothesForm.materialIndex}}" range="{{materials}}">
+              <view class="picker">
+                {{clothesForm.materialIndex !== null ? materials[clothesForm.materialIndex] : '请选择材质'}}
+              </view>
+            </picker>
+          </view>
+          <view class="form-item">
+            <view class="form-label">单价</view>
+            <input class="form-input" type="digit" placeholder="请输入单价" value="{{clothesForm.price}}" bindinput="onInputClothesPrice" />
+          </view>
+          <view class="form-item">
+            <view class="form-label">数量</view>
+            <view class="quantity-box">
+              <view class="quantity-btn" bindtap="decreaseQuantity">-</view>
+              <input class="quantity-input" type="number" value="{{clothesForm.quantity}}" bindinput="onInputClothesQuantity" />
+              <view class="quantity-btn" bindtap="increaseQuantity">+</view>
+            </view>
+          </view>
+          <view class="form-item">
+            <view class="form-label">特殊处理要求</view>
+            <checkbox-group bindchange="onSpecialRequirementsChange">
+              <view class="checkbox-item" wx:for="{{specialRequirements}}" wx:key="value">
+                <checkbox value="{{item.value}}" checked="{{clothesForm.specialRequirements.indexOf(item.value) !== -1}}" color="#1890ff" />
+                <text>{{item.name}}</text>
+              </view>
+            </checkbox-group>
+          </view>
+          <view class="form-item">
+            <view class="form-label">备注</view>
+            <textarea class="form-textarea" placeholder="请输入备注" value="{{clothesForm.remark}}" bindinput="onInputClothesRemark" />
+          </view>
+        </scroll-view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="cancelClothesModal">取消</button>
+        <button class="btn-confirm" bindtap="confirmClothesModal">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

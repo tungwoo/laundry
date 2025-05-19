@@ -1,2 +1,72 @@
 <!--pages/member/topup.wxml-->
-<text>pages/member/topup.wxml</text>
+<view class="container">
+  <!-- 会员信息 -->
+  <view class="member-section">
+    <view class="member-info">
+      <view class="member-name">{{member.name}}</view>
+      <view class="member-level">{{member.levelName}}</view>
+    </view>
+    <view class="member-balance">
+      <text class="balance-label">当前余额</text>
+      <text class="balance-value">¥{{member.balance}}</text>
+    </view>
+  </view>
+
+  <!-- 充值金额选择 -->
+  <view class="amount-section">
+    <view class="section-title">充值金额</view>
+    <view class="amount-grid">
+      <view class="amount-item {{selectedAmount === item.value ? 'active' : ''}}" 
+            wx:for="{{amountOptions}}" 
+            wx:key="value"
+            bindtap="selectAmount"
+            data-amount="{{item.value}}">
+        <text class="amount-value">¥{{item.value}}</text>
+        <text class="amount-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
+      </view>
+      <view class="amount-item custom {{selectedAmount === customAmount ? 'active' : ''}}">
+        <input class="custom-input" 
+               type="digit" 
+               placeholder="其他金额" 
+               value="{{customAmount}}"
+               bindinput="onCustomAmountInput"
+               bindtap="selectCustomAmount"/>
+      </view>
+    </view>
+  </view>
+
+  <!-- 支付方式选择 -->
+  <view class="payment-section">
+    <view class="section-title">支付方式</view>
+    <view class="payment-list">
+      <view class="payment-item {{paymentMethodIndex === index ? 'active' : ''}}" 
+            wx:for="{{paymentMethods}}" 
+            wx:key="*this"
+            bindtap="selectPaymentMethod"
+            data-index="{{index}}">
+        <image class="payment-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text class="payment-name">{{item}}</text>
+        <icon class="payment-check" type="success" size="16" color="#07c160" wx:if="{{paymentMethodIndex === index}}"></icon>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注信息 -->
+  <view class="remark-section">
+    <view class="section-title">备注信息</view>
+    <textarea class="remark-input" 
+              placeholder="请输入备注信息（选填）" 
+              value="{{remark}}"
+              bindinput="onRemarkInput"
+              maxlength="100"/>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="action-section">
+    <view class="amount-summary">
+      <text class="summary-label">充值金额</text>
+      <text class="summary-value">¥{{selectedAmount || customAmount || '0.00'}}</text>
+    </view>
+    <button class="btn-submit" bindtap="submitRecharge">确认充值</button>
+  </view>
+</view>

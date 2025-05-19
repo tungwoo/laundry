@@ -1,2 +1,134 @@
 <!--pages/order/detail.wxml-->
-<text>pages/order/detail.wxml</text>
+<view class="container">
+  <!-- 订单状态 -->
+  <view class="status-section">
+    <view class="status-header">
+      <view class="status-text {{order.status}}">{{order.statusText}}</view>
+      <view class="status-desc">{{order.statusDesc}}</view>
+    </view>
+    <view class="status-timeline">
+      <view class="timeline-item {{order.status === 'pending' ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">待处理</view>
+          <view class="timeline-time">{{order.createTime}}</view>
+        </view>
+      </view>
+      <view class="timeline-item {{order.status === 'processing' ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">处理中</view>
+          <view class="timeline-time">{{order.processingTime || '-'}}</view>
+        </view>
+      </view>
+      <view class="timeline-item {{order.status === 'ready' ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">待取件</view>
+          <view class="timeline-time">{{order.readyTime || '-'}}</view>
+        </view>
+      </view>
+      <view class="timeline-item {{order.status === 'completed' ? 'active' : ''}}">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">已完成</view>
+          <view class="timeline-time">{{order.completeTime || '-'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="order-section">
+    <view class="section-title">订单信息</view>
+    <view class="info-list">
+      <view class="info-item">
+        <text class="label">订单编号</text>
+        <text class="value">{{order.orderNo}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">创建时间</text>
+        <text class="value">{{order.createTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">支付方式</text>
+        <text class="value">{{order.paymentMethod}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">支付状态</text>
+        <text class="value {{order.paymentStatus === 'paid' ? 'success' : ''}}">{{order.paymentStatusText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客户信息 -->
+  <view class="customer-section">
+    <view class="section-title">客户信息</view>
+    <view class="info-list">
+      <view class="info-item">
+        <text class="label">客户姓名</text>
+        <text class="value">{{order.customerName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">联系电话</text>
+        <text class="value">{{order.customerPhone}}</text>
+      </view>
+      <view class="info-item" wx:if="{{order.isMember}}">
+        <text class="label">会员等级</text>
+        <text class="value">{{order.memberLevel}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 衣物清单 -->
+  <view class="clothes-section">
+    <view class="section-title">衣物清单</view>
+    <view class="clothes-list">
+      <view class="clothes-item" wx:for="{{order.clothesList}}" wx:key="id">
+        <view class="clothes-info">
+          <view class="clothes-type">{{item.type}}</view>
+          <view class="clothes-detail">
+            <text class="brand">{{item.brand}}</text>
+            <text class="color">{{item.color}}</text>
+            <text class="material">{{item.material}}</text>
+          </view>
+          <view class="clothes-requirements" wx:if="{{item.specialRequirements.length > 0}}">
+            <text class="requirement-tag" wx:for="{{item.specialRequirements}}" wx:key="*this" wx:for-item="req">{{req}}</text>
+          </view>
+          <view class="clothes-remark" wx:if="{{item.remark}}">
+            <text class="remark-label">备注：</text>
+            <text class="remark-content">{{item.remark}}</text>
+          </view>
+        </view>
+        <view class="clothes-price">¥{{item.price}}</view>
+      </view>
+    </view>
+    <view class="price-summary">
+      <view class="summary-item">
+        <text class="label">衣物数量</text>
+        <text class="value">{{order.clothesCount}}件</text>
+      </view>
+      <view class="summary-item">
+        <text class="label">订单总额</text>
+        <text class="value price">¥{{order.totalAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <block wx:if="{{order.status === 'pending'}}">
+      <button class="btn-primary" bindtap="updateStatus" data-status="processing">开始处理</button>
+    </block>
+    <block wx:if="{{order.status === 'processing'}}">
+      <button class="btn-primary" bindtap="updateStatus" data-status="ready">已上架</button>
+    </block>
+    <block wx:if="{{order.status === 'ready'}}">
+      <button class="btn-primary" bindtap="updateStatus" data-status="completed">已取件</button>
+    </block>
+    <block wx:if="{{order.status === 'completed'}}">
+      <button class="btn-default" bindtap="printOrder">打印订单</button>
+    </block>
+    <button class="btn-default" bindtap="goBack">返回列表</button>
+  </view>
+</view>

@@ -13,6 +13,9 @@ import './assets/styles/global.less'
 // 引入自定义组件
 import './components'
 
+// 引入权限控制
+import './permission'
+
 Vue.use(Antd)
 
 Vue.config.productionTip = false

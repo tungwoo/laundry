@@ -1,2 +1,85 @@
 <!--pages/clothes/edit.wxml-->
-<text>pages/clothes/edit.wxml</text>
+<view class="container">
+  <form bindsubmit="onSubmit">
+    <!-- 基本信息 -->
+    <view class="form-section">
+      <view class="section-title">基本信息</view>
+      
+      <view class="form-item">
+        <text class="label required">衣物类型</text>
+        <picker mode="selector" range="{{clothesTypes}}" value="{{typeIndex}}" bindchange="onTypeChange">
+          <view class="picker {{typeIndex === -1 ? 'placeholder' : ''}}">
+            {{typeIndex === -1 ? '请选择衣物类型' : clothesTypes[typeIndex]}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label required">品牌</text>
+        <input class="input" name="brand" value="{{brand}}" placeholder="请输入品牌名称" />
+      </view>
+
+      <view class="form-item">
+        <text class="label required">颜色</text>
+        <input class="input" name="color" value="{{color}}" placeholder="请输入颜色" />
+      </view>
+
+      <view class="form-item">
+        <text class="label required">材质</text>
+        <input class="input" name="material" value="{{material}}" placeholder="请输入材质" />
+      </view>
+
+      <view class="form-item">
+        <text class="label required">价格</text>
+        <input class="input" type="digit" name="price" value="{{price}}" placeholder="请输入价格" />
+      </view>
+    </view>
+
+    <!-- 特殊要求 -->
+    <view class="form-section">
+      <view class="section-title">特殊要求</view>
+      
+      <view class="form-item">
+        <text class="label">洗涤方式</text>
+        <picker mode="selector" range="{{washMethods}}" value="{{washMethodIndex}}" bindchange="onWashMethodChange">
+          <view class="picker {{washMethodIndex === -1 ? 'placeholder' : ''}}">
+            {{washMethodIndex === -1 ? '请选择洗涤方式' : washMethods[washMethodIndex]}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">熨烫要求</text>
+        <picker mode="selector" range="{{ironingLevels}}" value="{{ironingLevelIndex}}" bindchange="onIroningLevelChange">
+          <view class="picker {{ironingLevelIndex === -1 ? 'placeholder' : ''}}">
+            {{ironingLevelIndex === -1 ? '请选择熨烫要求' : ironingLevels[ironingLevelIndex]}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">特殊处理</text>
+        <view class="checkbox-group">
+          <view class="checkbox-item" wx:for="{{specialTreatments}}" wx:key="value">
+            <checkbox value="{{item.value}}" checked="{{item.checked}}" bindtap="onSpecialTreatmentChange" data-value="{{item.value}}" />
+            <text>{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-section">
+      <view class="section-title">备注</view>
+      <view class="form-item">
+        <textarea class="textarea" name="remark" value="{{remark}}" placeholder="请输入备注信息" maxlength="200" />
+        <text class="word-count">{{remark.length || 0}}/200</text>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="action-section">
+      <button class="btn-submit" form-type="submit" loading="{{submitting}}">保存</button>
+    </view>
+  </form>
+</view>

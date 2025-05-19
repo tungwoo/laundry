@@ -1,4 +1,4 @@
-<!--pages/clothes/clothes.wxml-->
+<!--pages/clothes/list.wxml-->
 <view class="container">
   <!-- 搜索栏 -->
   <view class="search-bar">
@@ -60,4 +60,4 @@
   <view class="float-button" bindtap="createNewClothes">
     <image src="/images/add.png" mode="widthFix"></image>
   </view>
-</view>
+</view> 

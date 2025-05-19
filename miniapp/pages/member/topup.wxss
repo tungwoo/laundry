@@ -1,0 +1,209 @@
+/* pages/member/topup.wxss */
+.container {
+  padding: 30rpx;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+/* 会员信息部分 */
+.member-section {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: var(--shadow-1);
+}
+
+.member-info {
+  margin-bottom: 20rpx;
+}
+
+.member-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.member-level {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.member-balance {
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.balance-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-right: 20rpx;
+}
+
+.balance-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+}
+
+/* 充值金额部分 */
+.amount-section {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: var(--shadow-1);
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+}
+
+.amount-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.amount-item {
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-md);
+  padding: 20rpx;
+  text-align: center;
+  border: 2rpx solid transparent;
+}
+
+.amount-item.active {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color-light);
+}
+
+.amount-value {
+  display: block;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.amount-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.custom-input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: var(--font-size-lg);
+}
+
+/* 支付方式部分 */
+.payment-section {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: var(--shadow-1);
+}
+
+.payment-list {
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.payment-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: var(--background-color);
+  margin-bottom: 2rpx;
+}
+
+.payment-item:last-child {
+  margin-bottom: 0;
+}
+
+.payment-item.active {
+  background-color: var(--primary-color-light);
+}
+
+.payment-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.payment-name {
+  flex: 1;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.payment-check {
+  margin-left: 20rpx;
+}
+
+/* 备注部分 */
+.remark-section {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: var(--shadow-1);
+}
+
+.remark-input {
+  width: 100%;
+  height: 160rpx;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-md);
+  padding: 20rpx;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+/* 操作按钮部分 */
+.action-section {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-2);
+}
+
+.amount-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.summary-label {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+}
+
+.summary-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+}
+
+.btn-submit {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: var(--font-size-lg);
+} 

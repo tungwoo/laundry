@@ -36,20 +36,14 @@ router.beforeEach(async (to, from, next) => {
         try {
           // 获取用户信息
           // 注意：roles必须是一个数组！ 如: ['admin'] 或 ['developer', 'editor']
-          const { roles } = await store.dispatch('user/getUserInfo');
+          await store.dispatch('user/getUserInfo');
 
-          // 基于角色生成可访问路由图
-          // const accessRoutes = await store.dispatch('permission/generateRoutes', roles);
-
-          // 动态添加可访问路由
-          // router.addRoutes(accessRoutes);
-
-          // hack方法 确保addRoutes已完成
+          // 重新加载页面
           next({ ...to, replace: true });
         } catch (error) {
           // 删除token并跳转到登录页面重新登录
           await store.dispatch('user/resetToken');
-          Message.error(error || 'Has Error');
+          Message.error(error || '验证失败，请重新登录');
           next(`/login?redirect=${to.path}`);
           NProgress.done();
         }

@@ -202,7 +202,6 @@
               <a-select
                 v-model="clothesForm.categoryId"
                 placeholder="请选择衣物类别"
-                :options="clothesCategories"
                 @change="handleCategoryChange"
               >
                 <a-select-option v-for="cat in clothesCategories" :key="cat.id" :value="cat.id">

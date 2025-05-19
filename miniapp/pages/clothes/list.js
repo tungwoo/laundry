@@ -1,67 +1,21 @@
-// pages/clothes/clothes.js
 const app = getApp()
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     loading: false,
     searchValue: '',
-    clothesTypes: [
-      { name: '上衣', value: 'shirt' },
-      { name: '裤子', value: 'pants' },
-      { name: '裙子', value: 'skirt' },
-      { name: '外套', value: 'coat' },
-      { name: '内衣', value: 'underwear' },
-      { name: '其他', value: 'other' }
-    ],
-    currentType: 'all',
+    clothesTypes: ['全部', '上衣', '裤子', '裙子', '外套', '内衣', '其他'],
+    selectedType: '全部',
     clothesList: [],
     pageNum: 1,
     pageSize: 10,
     hasMore: true
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onLoad() {
     this.loadClothesList()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh() {
     this.setData({
       pageNum: 1,
@@ -73,20 +27,10 @@ Page({
     })
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
   onReachBottom() {
     if (this.data.hasMore && !this.data.loading) {
       this.loadClothesList()
     }
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
   },
 
   // 加载衣物列表
@@ -100,7 +44,7 @@ Page({
         data: {
           pageNum: this.data.pageNum,
           pageSize: this.data.pageSize,
-          type: this.data.currentType === 'all' ? '' : this.data.currentType,
+          type: this.data.selectedType === '全部' ? '' : this.data.selectedType,
           keyword: this.data.searchValue
         }
       })
@@ -131,7 +75,7 @@ Page({
   },
 
   // 搜索确认
-  onSearch() {
+  onSearchConfirm() {
     this.setData({
       pageNum: 1,
       hasMore: true,
@@ -140,28 +84,20 @@ Page({
     this.loadClothesList()
   },
 
-  // 切换衣物类型
-  switchType(e) {
+  // 选择衣物类型
+  onTypeSelect(e) {
     const type = e.currentTarget.dataset.type
     this.setData({
-      currentType: type,
+      selectedType: type,
       pageNum: 1,
       hasMore: true,
       clothesList: []
     })
     this.loadClothesList()
-  },
-
-  // 跳转到详情页
-  goToDetail(e) {
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: `/pages/clothes/detail?id=${id}`
-    })
   },
 
   // 编辑衣物
-  editClothes(e) {
+  onEditClothes(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
       url: `/pages/clothes/edit?id=${id}`
@@ -169,7 +105,7 @@ Page({
   },
 
   // 删除衣物
-  deleteClothes(e) {
+  onDeleteClothes(e) {
     const id = e.currentTarget.dataset.id
     wx.showModal({
       title: '确认删除',
@@ -202,9 +138,9 @@ Page({
   },
 
   // 新建衣物
-  createNewClothes() {
+  onCreateClothes() {
     wx.navigateTo({
       url: '/pages/clothes/edit'
     })
   }
-})
+}) 

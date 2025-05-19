@@ -1,2 +1,118 @@
 <!--pages/clothes/add.wxml-->
-<text>pages/clothes/add.wxml</text>
+<view class="container">
+  <!-- 模式选择 -->
+  <view class="mode-selector">
+    <view class="mode-item {{mode === 'smart' ? 'active' : ''}}" bindtap="switchMode" data-mode="smart">
+      <image src="/images/smart.png" mode="aspectFit"></image>
+      <text>智能识别</text>
+    </view>
+    <view class="mode-item {{mode === 'manual' ? 'active' : ''}}" bindtap="switchMode" data-mode="manual">
+      <image src="/images/manual.png" mode="aspectFit"></image>
+      <text>手动录入</text>
+    </view>
+  </view>
+
+  <!-- 智能识别模式 -->
+  <view class="smart-mode" wx:if="{{mode === 'smart'}}">
+    <view class="upload-section">
+      <view class="upload-box" bindtap="chooseImage" wx:if="{{!tempImagePath}}">
+        <image src="/images/camera.png" mode="aspectFit"></image>
+        <text>点击拍照或上传照片</text>
+      </view>
+      <view class="preview-box" wx:else>
+        <image src="{{tempImagePath}}" mode="aspectFit" bindtap="previewImage"></image>
+        <view class="preview-actions">
+          <button class="btn-reupload" bindtap="chooseImage">重新上传</button>
+          <button class="btn-recognize" bindtap="startRecognition">开始识别</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="recognition-result" wx:if="{{recognitionResult}}">
+      <view class="result-title">识别结果</view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="label">衣物类型：</text>
+          <text class="value">{{recognitionResult.type}}</text>
+        </view>
+        <view class="result-item">
+          <text class="label">品牌：</text>
+          <text class="value">{{recognitionResult.brand}}</text>
+        </view>
+        <view class="result-item">
+          <text class="label">颜色：</text>
+          <text class="value">{{recognitionResult.color}}</text>
+        </view>
+        <view class="result-item">
+          <text class="label">建议价格：</text>
+          <text class="value">¥{{recognitionResult.suggestedPrice}}</text>
+        </view>
+      </view>
+      <view class="result-actions">
+        <button class="btn-edit" bindtap="editRecognitionResult">修改结果</button>
+        <button class="btn-confirm" bindtap="confirmRecognitionResult">确认添加</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 手动录入模式 -->
+  <view class="manual-mode" wx:if="{{mode === 'manual'}}">
+    <view class="form-section">
+      <view class="form-item">
+        <text class="label">衣物类型</text>
+        <picker bindchange="onTypeChange" value="{{typeIndex}}" range="{{clothesTypes}}">
+          <view class="picker">
+            {{clothesTypes[typeIndex] || '请选择衣物类型'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">品牌</text>
+        <input class="input" placeholder="请输入品牌" value="{{brand}}" bindinput="onBrandInput"/>
+      </view>
+
+      <view class="form-item">
+        <text class="label">颜色</text>
+        <picker bindchange="onColorChange" value="{{colorIndex}}" range="{{colors}}">
+          <view class="picker">
+            {{colors[colorIndex] || '请选择颜色'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">材质</text>
+        <picker bindchange="onMaterialChange" value="{{materialIndex}}" range="{{materials}}">
+          <view class="picker">
+            {{materials[materialIndex] || '请选择材质'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">价格</text>
+        <input class="input" type="digit" placeholder="请输入价格" value="{{price}}" bindinput="onPriceInput"/>
+      </view>
+
+      <view class="form-item">
+        <text class="label">特殊要求</text>
+        <checkbox-group bindchange="onSpecialRequirementsChange">
+          <label class="checkbox-item" wx:for="{{specialRequirements}}" wx:key="value">
+            <checkbox value="{{item.value}}" checked="{{item.checked}}"/>
+            <text>{{item.name}}</text>
+          </label>
+        </checkbox-group>
+      </view>
+
+      <view class="form-item">
+        <text class="label">备注</text>
+        <textarea class="textarea" placeholder="请输入备注信息" value="{{remark}}" bindinput="onRemarkInput"/>
+      </view>
+    </view>
+
+    <view class="form-actions">
+      <button class="btn-submit" bindtap="submitManualForm">确认添加</button>
+    </view>
+  </view>
+</view>

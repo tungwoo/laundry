@@ -55,12 +55,13 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
-          this.$store.dispatch('login', values)
+          this.$store.dispatch('user/login', values)
             .then(() => {
               this.$router.push({ path: '/' })
+              this.$message.success('登录成功')
             })
             .catch(error => {
-              this.$message.error('登录失败')
+              this.$message.error('登录失败: ' + (error.message || '未知错误'))
               console.error(error)
             })
             .finally(() => {
